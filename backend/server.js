@@ -11,6 +11,19 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, switchmode");
+  res.setHeader("Content-Type", "application/json");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.get("/meter", async (req, res) => {
   try {
     const response = await fetch(process.env.API_URL_METER, {
@@ -21,7 +34,6 @@ app.get("/meter", async (req, res) => {
     });
 
     const data = await response.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: e.toString() });
@@ -38,7 +50,6 @@ app.get("/evinterface", async (req, res) => {
     });
 
     const data = await response.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: e.toString() });
@@ -55,7 +66,6 @@ app.get("/system", async (req, res) => {
     });
 
     const data = await response.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: e.toString() });
@@ -71,7 +81,6 @@ app.get("/p1", async (req, res) => {
     });
     const data = await response.json();
 
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: e.toString() });

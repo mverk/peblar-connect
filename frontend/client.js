@@ -2,6 +2,7 @@ const API_URL_METER = "http://192.168.2.58:14500/meter";
 const API_URL_EV = "http://192.168.2.58:14500/evinterface";
 const API_URL_SYSTEM = "http://192.168.2.58:14500/system";
 const API_URL_P1 = "http://192.168.2.58:14500/p1";
+const API_URL_PEBCONMODES = "http://192.168.2.58:14500/peblarconnect/modes";
 
 function setText(id, value) {
     document.getElementById(id).textContent = value;
@@ -51,6 +52,10 @@ async function loadData() {
         const resP1 = await fetch(API_URL_P1);
         const data_p1 = await resP1.json();
 
+        // ---- PEBLAR CONNECT ----
+        const resPebCon = await fetch(API_URL_PEBCONMODES);
+        const data_PebCon = await resPebCon.json();
+
         // ---- LIVE POWER ----
         setText("l1wattage", data.PowerPhase1 + " W");
         setText("l2wattage", data.PowerPhase2 + " W");
@@ -69,6 +74,18 @@ async function loadData() {
         // ---- ERRORS & WARNINGS ----
         renderCodeBox("errorcodes", data_system.ActiveErrorCodes, "red");
         renderCodeBox("warningcodes", data_system.ActiveWarningCodes, "yellow");
+
+        // ---- PEBLAR CONNECT INFO ----
+        if(data_PebCon.currentMode === "standard") {
+          setText("currentmode", "Standard");
+        } else if(data_PebCon.currentMode === "solaronly") {
+          setText("currentmode", "Solar Only");
+        } else if(data_PebCon.currentMode === "gridandsolar") {
+          setText("currentmode", "Grid and Solar");
+        } else {
+          setText("currentmode", "Unknown");
+        }
+        
 
         const state = data_ev.CpState;
 
