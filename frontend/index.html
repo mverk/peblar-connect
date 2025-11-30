@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peblar Webinterface</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-900">
+  <div class="bg-gray-900 py-24 sm:py-32">
+    <h1 class="text-white text-center text-4xl font-bold">Live Usage</h1>
+    <br />
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+          <dt class="text-base/7 text-gray-400">L1</dt>
+          <dd id="l1wattage" class="order-first text-3xl font-semibold tracking-tight text-blue-500 sm:text-5xl">
+            0
+          </dd>
+        </div>
+        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+          <dt class="text-base/7 text-gray-400">L2</dt>
+          <dd id="l2wattage" class="order-first text-3xl font-semibold tracking-tight text-blue-500 sm:text-5xl">
+            0
+          </dd>
+        </div>
+        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+          <dt class="text-base/7 text-gray-400">L3</dt>
+          <dd id="l3wattage" class="order-first text-3xl font-semibold tracking-tight text-blue-500 sm:text-5xl">
+            0
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="bg-gray-900 py-24 sm:py-32">
+    <h1 class="text-white text-center text-4xl font-bold">Limits</h1>
+    <br />
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+          <dt class="text-base/7 text-gray-400">Charge limit</dt>
+          <dd id="chargelimit" class="order-first text-3xl font-semibold tracking-tight text-blue-500 sm:text-5xl">
+            0
+          </dd>
+        </div>
+        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+          <dt class="text-base/7 text-gray-400">Charge limit reason</dt>
+          <dd id="chargelimitreason"
+            class="order-first text-2xl font-semibold tracking-tight text-blue-500 sm:text-4xl">
+            Unknown
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="bg-gray-900 py-24 sm:py-32">
+    <h1 class="text-white text-center text-4xl font-bold">Settings</h1>
+
+    <div class="mx-auto max-w-5xl px-6 lg:px-8 mt-12 space-y-10">
+      <!-- MODES -->
+      <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg">
+        <h2 class="text-white text-2xl font-semibold mb-4">Change Mode</h2>
+        <h3 class="text-white text-1xl mb-4">Current Mode: <span id="mode"></span></h3>
+        <div class="relative inline-block text-left" id="dropdown-root">
+          <button id="dropdown-button" aria-haspopup="true" aria-expanded="false"
+            class="inline-flex items-center px-4 py-2 rounded-md border shadow-sm bg-white text-sm">
+            Mode
+            <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M5.23 7.21a.75.75 0 011.06-.02L10 10.67l3.71-3.48a.75.75 0 111.04 1.08l-4.25 3.99a.75.75 0 01-1.04 0L5.25 8.27a.75.75 0 01-.02-1.06z" />
+            </svg>
+          </button>
+
+          <div id="dropdown-menu" class="absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-white border hidden z-50">
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Standard</a>
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Solar only</a>
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Solar and Grid</a>
+          </div>
+        </div>
+
+        <br><br>
+        <p class="text-gray-500">Standard: Always charges the EV</p>
+        <p class="text-gray-500">Solar only: Only charges when there is solar coming in</p>
+        <p class="text-gray-500">Solar and Grid: Balances between solar and grid charging</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bg-gray-900 py-24 sm:py-32">
+    <h1 class="text-white text-center text-4xl font-bold">System Status</h1>
+
+    <div class="mx-auto max-w-5xl px-6 lg:px-8 mt-12 space-y-10">
+      <!-- STATE -->
+      <div class="bg-gray-800 border border-green-700 rounded-2xl p-6 shadow-lg">
+        <h2 class="text-green-400 text-2xl font-semibold mb-4">State</h2>
+        <div id="state" class="flex flex-wrap gap-3"></div>
+      </div>
+
+      <!-- DEVICE INFO BOX -->
+      <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg">
+        <h2 class="text-white text-2xl font-semibold mb-4">
+          Device Information
+        </h2>
+        <p class="text-gray-300">
+          Product PN: <span id="productpn" class="text-blue-400"></span>
+        </p>
+        <p class="text-gray-300">
+          Product SN: <span id="productsn" class="text-blue-400"></span>
+        </p>
+        <p class="text-gray-300">
+          Firmware: <span id="firmware" class="text-blue-400"></span>
+        </p>
+        <p class="text-gray-300">
+          Uptime: <span id="uptime" class="text-blue-400"></span>
+        </p>
+      </div>
+
+      <!-- ERRORS -->
+      <div class="bg-gray-800 border border-red-700 rounded-2xl p-6 shadow-lg">
+        <h2 class="text-red-400 text-2xl font-semibold mb-4">
+          Active Errors
+        </h2>
+        <div id="errorcodes" class="flex flex-wrap gap-3"></div>
+      </div>
+
+      <!-- WARNINGS -->
+      <div class="bg-gray-800 border border-yellow-700 rounded-2xl p-6 shadow-lg">
+        <h2 class="text-yellow-400 text-2xl font-semibold mb-4">
+          Active Warnings
+        </h2>
+        <div id="warningcodes" class="flex flex-wrap gap-3"></div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="./client.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+
+</html>

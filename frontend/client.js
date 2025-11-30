@@ -1,6 +1,7 @@
-const API_URL_METER = "http://...:14500/meter";
-const API_URL_EV = "http://...:14500/evinterface";
-const API_URL_SYSTEM = "http://...:14500/system";
+const API_URL_METER = "http://192.168.2.58:14500/meter";
+const API_URL_EV = "http://192.168.2.58:14500/evinterface";
+const API_URL_SYSTEM = "http://192.168.2.58:14500/system";
+const API_URL_P1 = "http://192.168.2.58:14500/p1";
 
 function setText(id, value) {
     document.getElementById(id).textContent = value;
@@ -8,7 +9,7 @@ function setText(id, value) {
 
 function renderCodeBox(containerId, codes, color) {
     const container = document.getElementById(containerId);
-    container.innerHTML = "";
+    container.innerHTML = ""; // Clear existing
 
     if (!codes || codes.length === 0) {
         container.innerHTML = `<p class="text-gray-400">None</p>`;
@@ -44,7 +45,11 @@ async function loadData() {
 
         // ---- SYSTEM DATA ----
         const resSystem = await fetch(API_URL_SYSTEM);
-        const data_system = await resSystem.json();
+        const data_system = await resSystem.json(); 
+
+        // ---- P1 DATA ----
+        const resP1 = await fetch(API_URL_P1);
+        const data_p1 = await resP1.json();
 
         // ---- LIVE POWER ----
         setText("l1wattage", data.PowerPhase1 + " W");
@@ -52,7 +57,7 @@ async function loadData() {
         setText("l3wattage", data.PowerPhase3 + " W");
 
         // ---- LIMITS ----
-        setText("chargelimit", (data_ev.ChargeCurrentLimit / 1000) + " A");
+        setText("chargelimit", (data_ev.ChargeCurrentLimitActual / 1000) + " A");
         setText("chargelimitreason", data_ev.ChargeCurrentLimitSource ?? "Unknown");
 
         // ---- DEVICE INFO ----
@@ -102,3 +107,40 @@ async function loadData() {
 
 setInterval(loadData, 2000);
 loadData();
+
+// Regular JS for the frontend below //
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.getElementById("dropdown-root");
+  const btn = document.getElementById("dropdown-button");
+  const menu = document.getElementById("dropdown-menu");
+
+  function isOpen() {
+    return !menu.classList.contains("hidden");
+  }
+
+  function openMenu() {
+    menu.classList.remove("hidden");
+    btn.setAttribute("aria-expanded", "true");
+  }
+
+  function closeMenu() {
+    menu.classList.add("hidden");
+    btn.setAttribute("aria-expanded", "false");
+  }
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    isOpen() ? closeMenu() : openMenu();
+  });
+
+  // Close when clicking outside of the dropdown
+  document.addEventListener("click", (e) => {
+    if (!root.contains(e.target)) closeMenu();
+  });
+
+  // Close with ESC key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+});
+

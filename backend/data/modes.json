@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "mode": "standard",
+    "description": "Always charges the EV",
+    "enabled": true
+  },
+  {
+    "id": 2,
+    "mode": "solaronly",
+    "description": "Only charges when there is solar coming in",
+    "enabled": true
+  },
+  {
+    "id": 3,
+    "mode": "solarandgrid",
+    "description": "Balances between solar and grid charging",
+    "enabled": false
+  }
+]
