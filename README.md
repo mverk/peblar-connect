@@ -153,7 +153,8 @@ The peblarconnect/modes endpoint is used to change modes and also check the curr
 }
 ```
 
-<b>Request example</b><br>
+<br>
+
 🟢 **POST** `/peblarconnect/modes`<br>
 Headers: `switchmode: solaronly`
 
